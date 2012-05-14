@@ -1,10 +1,6 @@
 (ns protozoa.bezier
-  (:use [protozoa.geometry :only [scale sum]]))
-
-(defn- binomial
-  [n k]
-  (int (apply * (for [i (range 1 (inc k))]
-                  (/ (- n (- k i)) i)))))
+  (:use [protozoa.geometry :only [scale sum]]
+        [protozoa.util :only [binomial]]))
 
 (defmacro order-n
   [n]
@@ -16,3 +12,8 @@
     `(fn [& ~'points]
        (fn [~'t]
          (sum ~@sigma-terms)))))
+
+(def linear (order-n 1))
+(def quadratic (order-n 2))
+(def cubic (order-n 3))
+(def quartic (order-n 4))

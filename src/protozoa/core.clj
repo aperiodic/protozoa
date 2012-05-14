@@ -1,5 +1,9 @@
 (ns protozoa.core
-  (:require [protozoa.protozoon :as protozoon] :reload-all)
+  (:require [protozoa.bezier :as bez]
+            [protozoa.geometry :as geom]
+            [protozoa.protozoon :as zoon]
+            [protozoa.pspace :as pspace]
+            :reload-all)
   (:use [quil core]))
 
 (defn setup []
@@ -7,8 +11,14 @@
   (color-mode :hsb 1.0)
   (frame-rate 30)
   (background 1)
-  (set-state! :protozoa (atom ()))
-  (protozoon/setup))
+  (set-state! :protozoa (atom ())
+              :pspace-path (atom nil)
+              :pspace-start (atom nil)
+              :pspace-stop (atom nil)
+              :pspace-x (atom 0)
+              :pspace-y (atom 0))
+  (pspace/setup)
+  (zoon/setup))
 
 (defn draw []
   ; Draw a mostly transparent white rect instead of clearing the background, in
@@ -18,10 +28,18 @@
   ;(fill 1 0.15)
   ;(rect 0 0 (width) (height))
 
-  (translate (/ (width) 2) (/ (height) 2))
+  ;(translate (/ (width) 2) (/ (height) 2))
 
-  (protozoon/tick)
-  (protozoon/draw))
+  ;(zoon/tick)
+  ;(zoon/draw)
+
+  (pspace/tick)
+
+  (background 0.33)
+  (stroke 1)
+  (stroke-weight 4)
+  (fill 0.611 0.71 0.61)
+  (ellipse @(state :pspace-x) @(state :pspace-y) 20 20))
 
 (defsketch protozoa
   :title "Protozoa"
@@ -29,5 +47,6 @@
   :draw draw
   :size [1680 1038]
   :renderer :p2d
-  :key-pressed #(do (background 1)
-                    (protozoon/setup)))
+  ;:key-pressed #(do (background 1)
+  ;                  (zoon/setup))
+  )

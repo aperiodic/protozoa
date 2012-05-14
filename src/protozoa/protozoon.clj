@@ -1,15 +1,11 @@
 (ns protozoa.protozoon
-  (:use [quil core]))
+  (:refer-clojure :exclude [rand])
+  (:use [protozoa.util :only [rand]]
+        [quil core]))
 
-;;;
-
-(defn- rand
-  ([] (clojure.core/rand))
-  ([n] (clojure.core/rand n))
-  ([l h]
-   (+ l (clojure.core/rand (- h l)))))
-
-;;;
+;;
+;; Constants & Globals
+;;
 
 (def p-count 25000)
 (def a (atom 0))
@@ -18,17 +14,22 @@
 (def d (atom 0))
 
 ;;;
+;;; Functions
+;;;
+
+(defn rand-coord []
+  (rand -2 2))
 
 (defn protozoon []
-  {:x (rand -2 2), :y (rand -2 2), :ticks-left (rand 50 150)})
+  {:x (rand-coord), :y (rand-coord), :ticks-left (rand 50 150)})
 
-(defn random-coefficient
+(defn rand-coefficient
   ([] (rand -5 5))
-  ([_] (rand -5 5)))
+  ([_] (rand-coefficient)))
 
 (defn randomize-coefficients []
   (doseq [coeff [a b c d]]
-    (swap! coeff random-coefficient)))
+    (swap! coeff rand-coefficient)))
 
 (defn setup []
   (swap! (state :protozoa) (fn [_] (list)))
@@ -52,4 +53,4 @@
   (stroke 0 1/30)
   (let [scale (/ (height) 4.1)]
     (doseq [p @(state :protozoa)]
-      (point (* scale (:x p)) (* scale (:y p))))))
+      (point (round (* scale (:x p))) (round (* scale (:y p)))))))
