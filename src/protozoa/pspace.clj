@@ -2,13 +2,16 @@
   "No, not the complexity class. This handles traversal through the parameter
   space to determine the values of the coefficients of the de jong mapping."
   (:refer-clojure :exclude [rand])
-  (:require [protozoa.bezier :as bez]
+  (:require [protozoa.animation :as anim]
+            [protozoa.bezier :as bez]
             [protozoa.geometry :as geom :exclude [rand-point]])
   (:use [protozoa.util :only [invert rand]]
         [quil core]))
 
 (def hi-limit 5)
 (def lo-limit (invert hi-limit))
+(def step-2d 400)
+(def anim-duration 120)
 
 (defn rand-point []
   (let [hi-point (zipmap [:a :b :c :d] (repeat hi-limit))
@@ -22,21 +25,33 @@
 (defn rand-path []
   (apply bez/cubic (repeatedly 4 rand-2d-point)))
 
+(defn rand-2d-step
+  [{:keys [x y]}]
+  (let [lo-point {:x (max (- x step-2d) 0), :y (max (- y step-2d) 0)}
+        hi-point {:x (min (+ x step-2d) (width))
+                  :y (min (+ y step-2d) (height))}]
+    (protozoa.geometry/rand-point lo-point hi-point)))
+
+(defn find-next-path*
+  [prior-anim]
+  (let [prior-target (last (:points (:curve prior-anim)))
+        curve (apply bez/cubic (conj (repeatedly 3 #(rand-2d-step prior-target))
+                                     prior-target))
+        start (frame-count)
+        stop (+ start anim-duration)]
+    (anim/animation curve start stop)))
+
 (defn find-next-path []
-  (swap! (state :pspace-start) (fn [_] (frame-count)))
-  (swap! (state :pspace-stop) (fn [_] (+ (frame-count) 100)))
-  (swap! (state :pspace-path) (fn [_] (rand-path))))
+  (swap! (state :pspace-path) find-next-path*))
 
 (defn setup []
+  (swap! (state :pspace-path) (fn [_] (anim/animation (rand-path) 0 anim-duration)))
   (find-next-path))
 
 (defn tick []
-  (let [start-frame @(state :pspace-start)
-        stop-frame @(state :pspace-stop)
-        t (/ (- (frame-count) start-frame) (- stop-frame start-frame))
-        curve @(state :pspace-path)
-        {:keys [x y]} (curve t)]
-    (if (> t 1.0)
+  (let [param-anim @(state :pspace-path)
+        {:keys [x y]} (anim/eval param-anim)]
+    (if (> (frame-count) (:stop param-anim))
       (do (find-next-path)
           (recur))
       ;else

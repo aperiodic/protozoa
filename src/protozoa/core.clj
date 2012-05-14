@@ -13,8 +13,6 @@
   (background 1)
   (set-state! :protozoa (atom ())
               :pspace-path (atom nil)
-              :pspace-start (atom nil)
-              :pspace-stop (atom nil)
               :pspace-x (atom 0)
               :pspace-y (atom 0))
   (pspace/setup)
@@ -39,14 +37,14 @@
   (stroke 1)
   (stroke-weight 4)
   (fill 0.611 0.71 0.61)
-  (ellipse @(state :pspace-x) @(state :pspace-y) 20 20))
+  (ellipse @(state :pspace-x) @(state :pspace-y) 30 30))
 
 (defsketch protozoa
   :title "Protozoa"
   :setup setup
   :draw draw
   :size [1680 1038]
-  :renderer :p2d
+  ;:renderer :p2d
   ;:key-pressed #(do (background 1)
   ;                  (zoon/setup))
   )

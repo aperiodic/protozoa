@@ -1,8 +1,9 @@
 (ns protozoa.bezier
+  (:refer-clojure :exclude [eval])
   (:use [protozoa.geometry :only [scale sum]]
         [protozoa.util :only [binomial]]))
 
-(defmacro order-n
+(defmacro of-order
   [n]
   (let [sigma-terms (for [i (range (inc n))]
                       `(scale (* ~(binomial n i)
@@ -10,10 +11,14 @@
                                  (Math/pow ~'t ~i))
                               (nth ~'points ~i)))]
     `(fn [& ~'points]
-       (fn [~'t]
-         (sum ~@sigma-terms)))))
+       {~:fn (fn [~'t] (sum ~@sigma-terms))
+        ~:points ~'points})))
 
-(def linear (order-n 1))
-(def quadratic (order-n 2))
-(def cubic (order-n 3))
-(def quartic (order-n 4))
+(def linear (of-order 1))
+(def quadratic (of-order 2))
+(def cubic (of-order 3))
+(def quartic (of-order 4))
+
+(defn eval
+  [curve t]
+  ((:fn curve) t))
