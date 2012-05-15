@@ -16,8 +16,7 @@
               :pspace-x (atom 0)
               :pspace-y (atom 0))
   (pspace/setup)
-  (zoon/setup)
-  (background 0.33))
+  (zoon/setup))
 
 (defn draw []
   ; Draw a mostly transparent white rect instead of clearing the background, in
@@ -33,8 +32,9 @@
   ;(zoon/draw)
 
   (pspace/tick)
+  (background 0.33)
 
-  #_(let [[begin handle-0 handle-1 end] (-> @(state :pspace-path) :curve :points)]
+  (let [[begin handle-0 handle-1 end] (-> @(state :pspace-path) :curve :points)]
     (no-fill)
     (stroke 0.1)
     (stroke-weight 3)
