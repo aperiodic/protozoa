@@ -8,36 +8,33 @@
   (:use [protozoa.util :only [invert rand]]
         [quil core]))
 
+(def coeffs [:a :b :c :d])
 (def hi-limit 5)
 (def lo-limit (invert hi-limit))
-(def step-2d 300)
-(def anim-duration 120)
+(def step 2.5)
+(def anim-duration 360)
 
 (defn rand-point []
-  (let [hi-point (zipmap [:a :b :c :d] (repeat hi-limit))
-        lo-point (zipmap [:a :b :c :d] (repeat lo-limit))]
+  (let [hi-point (zipmap coeffs (repeat hi-limit))
+        lo-point (zipmap coeffs (repeat lo-limit))]
     (protozoa.geometry/rand-point lo-point hi-point)))
 
-(defn rand-2d-point []
-  {:x (rand 0 (width))
-   :y (rand 0 (height))})
-
 (defn rand-path []
-  (apply bez/cubic (repeatedly 4 rand-2d-point)))
+  (apply bez/cubic (repeatedly 4 rand-point)))
 
-(defn rand-2d-step
-  [{:keys [x y]}]
-  (let [lo-point {:x (max (- x step-2d) 0), :y (max (- y step-2d) 0)}
-        hi-point {:x (min (+ x step-2d) (width))
-                  :y (min (+ y step-2d) (height))}]
+(defn rand-step
+  [{:keys [a b c d]}]
+  (let [lo-point (zipmap coeffs (for [coeff [a b c d]]
+                                  (max (- coeff step) lo-limit)))
+        hi-point (zipmap coeffs (for [coeff [a b c d]]
+                                  (min (+ coeff step) hi-limit)))]
     (protozoa.geometry/rand-point lo-point hi-point)))
 
 (defn find-next-path*
   [prior-anim]
-  (let [[_ _ handle target] (:points (:curve prior-anim))
-        handle' (geom/sum target (geom/sub target handle))
-        curve (apply bez/cubic target handle'
-                               (repeatedly 2 #(rand-2d-step target)))
+  (let [[_ _ handle end] (:points (:curve prior-anim))
+        handle' (geom/sum end (geom/sub end handle))
+        curve (apply bez/cubic end handle' (repeatedly 2 #(rand-step end)))
         start (frame-count)
         stop (+ start anim-duration)]
     (anim/animation curve start stop)))
@@ -51,15 +48,11 @@
 
 (defn tick []
   (let [param-anim @(state :pspace-path)
-        {:keys [x y]} (anim/eval param-anim)]
+        pos (anim/eval param-anim)]
     (if (> (frame-count) (:stop param-anim))
       (do (find-next-path)
           (recur))
       ;else
-      (do (swap! (state :pspace-x) (constantly x))
-          (swap! (state :pspace-y) (constantly y))
-          ;(swap! (state :a) a)
-          ;(swap! (state :b) b)
-          ;(swap! (state :c) c)
-          ;(swap! (state :d) d)
-          ))))
+      (doseq [[coeff val] pos]
+        (swap! (state coeff) (constantly val)))
+      )))
