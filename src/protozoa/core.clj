@@ -16,7 +16,8 @@
               :pspace-x (atom 0)
               :pspace-y (atom 0))
   (pspace/setup)
-  (zoon/setup))
+  (zoon/setup)
+  (background 0.33))
 
 (defn draw []
   ; Draw a mostly transparent white rect instead of clearing the background, in
@@ -33,9 +34,25 @@
 
   (pspace/tick)
 
-  (background 0.33)
+  #_(let [[begin handle-0 handle-1 end] (-> @(state :pspace-path) :curve :points)]
+    (no-fill)
+    (stroke 0.1)
+    (stroke-weight 3)
+    (line (:x begin) (:y begin) (:x handle-0) (:y handle-0))
+    (line (:x handle-1) (:y handle-1) (:x end) (:y end))
+
+    (fill 0.1)
+    (no-stroke)
+    (ellipse (:x handle-0) (:y handle-0) 10 10)
+    (ellipse (:x handle-1) (:y handle-1) 11 11)
+
+    (no-fill)
+    (stroke 0.1)
+    (stroke-weight 4)
+    (bezier (:x begin) (:y begin), (:x handle-0) (:y handle-0)
+            (:x handle-1) (:y handle-1), (:x end) (:y end)))
+
   (stroke 1)
-  (stroke-weight 4)
   (fill 0.611 0.71 0.61)
   (ellipse @(state :pspace-x) @(state :pspace-y) 30 30))
 

@@ -36,3 +36,7 @@
      (if-let [c (first to-sum)]
        (recur (sum result c) (rest to-sum))
        result))))
+
+(defn sub
+  [a b]
+  (sum a (scale -1 b)))

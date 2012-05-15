@@ -1,6 +1,6 @@
 (ns protozoa.pspace
   "No, not the complexity class. This handles traversal through the parameter
-  space to determine the values of the coefficients of the de jong mapping."
+  space of the de jong mapping."
   (:refer-clojure :exclude [rand])
   (:require [protozoa.animation :as anim]
             [protozoa.bezier :as bez]
@@ -10,7 +10,7 @@
 
 (def hi-limit 5)
 (def lo-limit (invert hi-limit))
-(def step-2d 400)
+(def step-2d 300)
 (def anim-duration 120)
 
 (defn rand-point []
@@ -34,9 +34,10 @@
 
 (defn find-next-path*
   [prior-anim]
-  (let [prior-target (last (:points (:curve prior-anim)))
-        curve (apply bez/cubic (conj (repeatedly 3 #(rand-2d-step prior-target))
-                                     prior-target))
+  (let [[_ _ handle target] (:points (:curve prior-anim))
+        handle' (geom/sum target (geom/sub target handle))
+        curve (apply bez/cubic target handle'
+                               (repeatedly 2 #(rand-2d-step target)))
         start (frame-count)
         stop (+ start anim-duration)]
     (anim/animation curve start stop)))
