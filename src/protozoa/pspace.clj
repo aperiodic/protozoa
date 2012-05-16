@@ -10,8 +10,9 @@
 
 (def hi-limit 5)
 (def lo-limit (invert hi-limit))
-(def step-2d 300)
+(def step-2d 400)
 (def anim-duration 120)
+(def path-length 30)
 
 (defn rand-point []
   (let [hi-point (zipmap [:a :b :c :d] (repeat hi-limit))
@@ -33,14 +34,17 @@
     (protozoa.geometry/rand-point lo-point hi-point)))
 
 (defn find-next-path*
-  [anims]
-  (let [[_ _ handle target] (:points (:curve (first anims)))
+  [paths]
+  (let [[_ _ handle target] (:points (:curve (first paths)))
         handle' (geom/sum target (geom/sub target handle))
         curve (apply bez/cubic target handle'
                                (repeatedly 2 #(rand-2d-step target)))
-        start (frame-count)
-        stop (+ start anim-duration)]
-    (conj anims (anim/animation curve start stop))))
+        start (+ (frame-count))
+        stop (+ start anim-duration)
+        next-path (anim/animation curve start stop)]
+    (if (< (count paths) path-length)
+      (conj paths next-path)
+      (conj (butlast paths) next-path))))
 
 (defn find-next-path []
   (swap! (state :pspace-paths) find-next-path*))
