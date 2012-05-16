@@ -11,7 +11,7 @@
 (def hi-limit 5)
 (def lo-limit (invert hi-limit))
 (def step-2d 300)
-(def anim-duration 120)
+(def anim-duration 90)
 
 (defn rand-point []
   (let [hi-point (zipmap [:a :b :c :d] (repeat hi-limit))

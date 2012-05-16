@@ -34,25 +34,8 @@
 
   (pspace/tick)
 
-  #_(let [[begin handle-0 handle-1 end] (-> @(state :pspace-path) :curve :points)]
-    (no-fill)
-    (stroke 0.1)
-    (stroke-weight 3)
-    (line (:x begin) (:y begin) (:x handle-0) (:y handle-0))
-    (line (:x handle-1) (:y handle-1) (:x end) (:y end))
-
-    (fill 0.1)
-    (no-stroke)
-    (ellipse (:x handle-0) (:y handle-0) 10 10)
-    (ellipse (:x handle-1) (:y handle-1) 11 11)
-
-    (no-fill)
-    (stroke 0.1)
-    (stroke-weight 4)
-    (bezier (:x begin) (:y begin), (:x handle-0) (:y handle-0)
-            (:x handle-1) (:y handle-1), (:x end) (:y end)))
-
   (stroke 1)
+  (stroke-weight 2)
   (fill 0.611 0.71 0.61)
   (ellipse @(state :pspace-x) @(state :pspace-y) 30 30))
 
