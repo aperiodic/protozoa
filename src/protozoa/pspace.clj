@@ -33,24 +33,24 @@
     (protozoa.geometry/rand-point lo-point hi-point)))
 
 (defn find-next-path*
-  [prior-anim]
-  (let [[_ _ handle target] (:points (:curve prior-anim))
+  [anims]
+  (let [[_ _ handle target] (:points (:curve (first anims)))
         handle' (geom/sum target (geom/sub target handle))
         curve (apply bez/cubic target handle'
                                (repeatedly 2 #(rand-2d-step target)))
         start (frame-count)
         stop (+ start anim-duration)]
-    (anim/animation curve start stop)))
+    (conj anims (anim/animation curve start stop))))
 
 (defn find-next-path []
-  (swap! (state :pspace-path) find-next-path*))
+  (swap! (state :pspace-paths) find-next-path*))
 
 (defn setup []
-  (swap! (state :pspace-path) (fn [_] (anim/animation (rand-path) 0 anim-duration)))
+  (swap! (state :pspace-paths) conj (anim/animation (rand-path) 0 anim-duration))
   (find-next-path))
 
 (defn tick []
-  (let [param-anim @(state :pspace-path)
+  (let [param-anim (first @(state :pspace-paths))
         {:keys [x y]} (anim/eval param-anim)]
     (if (> (frame-count) (:stop param-anim))
       (do (find-next-path)

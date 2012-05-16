@@ -12,7 +12,7 @@
   (frame-rate 30)
   (background 1)
   (set-state! :protozoa (atom ())
-              :pspace-path (atom nil)
+              :pspace-paths (atom ())
               :pspace-x (atom 0)
               :pspace-y (atom 0))
   (pspace/setup)
@@ -34,23 +34,24 @@
   (pspace/tick)
   (background 0.33)
 
-  (let [[begin handle-0 handle-1 end] (-> @(state :pspace-path) :curve :points)]
-    (no-fill)
-    (stroke 0.1)
-    (stroke-weight 3)
-    (line (:x begin) (:y begin) (:x handle-0) (:y handle-0))
-    (line (:x handle-1) (:y handle-1) (:x end) (:y end))
+  (doseq [anim @(state :pspace-paths)]
+    (let [[begin handle-0 handle-1 end] (-> anim :curve :points)]
+      (no-fill)
+      (stroke 0.1)
+      (stroke-weight 3)
+      (line (:x begin) (:y begin) (:x handle-0) (:y handle-0))
+      (line (:x handle-1) (:y handle-1) (:x end) (:y end))
 
-    (fill 0.1)
-    (no-stroke)
-    (ellipse (:x handle-0) (:y handle-0) 10 10)
-    (ellipse (:x handle-1) (:y handle-1) 11 11)
+      (fill 0.1)
+      (no-stroke)
+      (ellipse (:x handle-0) (:y handle-0) 10 10)
+      (ellipse (:x handle-1) (:y handle-1) 11 11)
 
-    (no-fill)
-    (stroke 0.1)
-    (stroke-weight 4)
-    (bezier (:x begin) (:y begin), (:x handle-0) (:y handle-0)
-            (:x handle-1) (:y handle-1), (:x end) (:y end)))
+      (no-fill)
+      (stroke 0.1)
+      (stroke-weight 4)
+      (bezier (:x begin) (:y begin), (:x handle-0) (:y handle-0)
+              (:x handle-1) (:y handle-1), (:x end) (:y end))))
 
   (stroke 1)
   (fill 0.611 0.71 0.61)
