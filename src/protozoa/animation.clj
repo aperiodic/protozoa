@@ -7,7 +7,10 @@
   [curve start stop]
   {:curve curve, :start start, :stop stop})
 
+(defn t
+  [{:keys [start stop]}]
+  (/ (- (frame-count) start) (- stop start)))
+
 (defn eval
-  [{:keys [start stop curve]}]
-  (let [t (/ (- (frame-count) start) (- stop start))]
-    (bez/eval curve t)))
+  [anim]
+  (bez/eval (:curve anim) (t anim)))
