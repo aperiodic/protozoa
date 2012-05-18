@@ -1,5 +1,8 @@
 (ns protozoa.util
-  (:refer-clojure :exclude [rand]))
+  (:refer-clojure :exclude [rand])
+  (use [quil core]))
+
+(set! *warn-on-reflection* true)
 
 (defn binomial
   [n k]
@@ -13,3 +16,9 @@
    (+ l (clojure.core/rand (- h l)))))
 
 (defn invert [x] (* x -1))
+
+(defn draw-and-preserve-matrix
+  [f]
+  (push-matrix)
+  (f)
+  (pop-matrix))

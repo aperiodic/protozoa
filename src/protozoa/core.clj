@@ -4,7 +4,10 @@
             [protozoa.protozoon :as zoon]
             [protozoa.pspace :as pspace]
             :reload-all)
-  (:use [quil core]))
+  (:use [protozoa.util :only [draw-and-preserve-matrix]]
+        [quil core]))
+
+(set! *warn-on-reflection* true)
 
 (defn setup []
   (smooth)
@@ -21,32 +24,25 @@
   ; Draw a mostly transparent white rect instead of clearing the background, in
   ; order to present the illusion of there being more particles than is actually
   ; the case.
-  ;(no-stroke)
-  ;(fill 1 0.15)
-  ;(rect 0 0 (width) (height))
-
-  ;(translate (/ (width) 2) (/ (height) 2))
-
-  ;(zoon/tick)
-  ;(zoon/draw)
+  (no-stroke)
+  (fill 1 0.15)
+  (rect 0 0 (width) (height))
 
   (pspace/tick)
-  (background 0.33)
+  (zoon/tick)
+  (draw-and-preserve-matrix zoon/draw)
 
-  (no-stroke)
-  (fill 0.85)
-  (doseq [[coeff i] (map vector [:a :b :c :d] (range))]
-    (let [v @(state coeff)
-          start-x (- (/ (width) 2) 110)]
-      (rect (+ start-x (* i 60)) (/ (height) 2)
-            40 (* v (/ (height) 11))))))
+  (let [fr-ratio (/ (current-frame-rate) 30)
+        rw (* (- (width) 40) fr-ratio)]
+    (no-stroke)
+    (fill 0.077 0.82 0.87 0.5)
+    (rect 20 20 rw 45)))
 
 (defsketch protozoa
   :title "Protozoa"
   :setup setup
   :draw draw
   :size [1680 1038]
-  ;:renderer :p2d
-  ;:key-pressed #(do (background 1)
-  ;                  (zoon/setup))
-  )
+  :renderer :p2d
+  :key-pressed #(do (background 1)
+                    (pspace/setup)))

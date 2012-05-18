@@ -8,11 +8,13 @@
   (:use [protozoa.util :only [invert rand]]
         [quil core]))
 
+(set! *warn-on-reflection* true)
+
 (def coeffs [:a :b :c :d])
 (def hi-limit 5)
 (def lo-limit (invert hi-limit))
-(def step 2.5)
-(def anim-duration 360)
+(def step 1.5)
+(def anim-duration 720)
 
 (defn rand-point []
   (let [hi-point (zipmap coeffs (repeat hi-limit))
@@ -54,5 +56,4 @@
           (recur))
       ;else
       (doseq [[coeff val] pos]
-        (swap! (state coeff) (constantly val)))
-      )))
+        (swap! (state coeff) (constantly val))))))
