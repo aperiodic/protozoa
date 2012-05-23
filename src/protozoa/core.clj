@@ -36,7 +36,7 @@
         rw (* (- (width) 40) fr-ratio)]
     (no-stroke)
     (fill 0.077 0.82 0.87 0.5)
-    (rect 20 20 rw 45)))
+    (rect 20 20 rw 20)))
 
 (defsketch protozoa
   :title "Protozoa"
