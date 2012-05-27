@@ -9,7 +9,7 @@
 ;; Constants & Globals
 ;;
 
-(def p-count 1000)
+(def p-count 2000)
 (def coeffs [:a :b :c :d])
 
 ;;
@@ -52,7 +52,9 @@
 (defn draw []
   (translate (/ (width) 2) (/ (height) 2))
   (fill 0)
-  (stroke 0)
+  (if @(state :paused)
+    (stroke 0 0.15)
+    (stroke 0))
   (let [scale (/ (height) 4.1)]
     (doseq [p @(state :protozoa)]
       (point (round (* scale (:x p))) (round (* scale (:y p)))))))
