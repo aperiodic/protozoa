@@ -2,6 +2,9 @@
 
 A de Jong attractor explorer, built with quil.
 
+The `tubes` and `bezier-wanderer` branches contain alternate sketches that grew
+out of development smoketests of the bezier and animation namespaces.
+
 ## Usage
 
 Clone this repo, then in a REPL `(use 'protozoa.core)`.
