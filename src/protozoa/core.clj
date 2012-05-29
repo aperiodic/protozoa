@@ -17,7 +17,7 @@
   (set-state! :protozoa (atom ())
               :pspace-path (atom nil)
               :a (atom 0), :b (atom 0), :c (atom 0), :d (atom 0)
-              :fps (atom false), :paused (atom false))
+              :fps (atom true), :paused (atom true))
   (pspace/setup)
   (zoon/setup))
 
@@ -43,12 +43,12 @@
       (no-stroke)
       (fill 1)
       (rect 0 0 60 (height))
-      (fill 0.077 0.82 0.87 0.5)
+      (fill 0.077 0.82 0.87)
       (rect 20 bottom 20 curr-height))))
 
 (defn key-pressed []
   (case (raw-key)
-    \f (swap! (state :fps) not)
+    \m (swap! (state :fps) not)
     \p (do
          (when-not @(state :paused)
            (background 1))
