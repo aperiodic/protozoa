@@ -17,7 +17,7 @@
   (set-state! :protozoa (atom ())
               :pspace-path (atom nil)
               :a (atom 0), :b (atom 0), :c (atom 0), :d (atom 0)
-              :fps (atom true), :paused (atom true))
+              :fps (atom false), :paused (atom true))
   (pspace/setup)
   (zoon/setup))
 
