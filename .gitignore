@@ -6,6 +6,6 @@
 /.lein-failures
 /checkouts
 /.lein-deps-sum
-*.swp
-*.swo
+*.sw*
+*~
 .DS_Store
