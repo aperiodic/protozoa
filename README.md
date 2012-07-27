@@ -17,7 +17,7 @@ displayed, and the image is correspondingly lower-quality, but the behaviour of
 the mapping as the parameters animate (along a random bezier walk) is
 interesting.
 
-An fps meter can be toggled by pressing your `f` key.
+An fps meter can be toggled by pressing your `m` key.
 
 ## License
 
