@@ -7,7 +7,7 @@
 ;; Constants & Globals
 ;;
 
-(def p-count 2000)
+(def p-count 5000)
 (def coeffs [:a :b :c :d])
 
 ;;
@@ -51,8 +51,12 @@
   (translate (/ (width) 2) (/ (height) 2))
   (fill 0)
   (if @(state :paused)
-    (stroke 0 0.15)
-    (stroke 0))
+    (stroke 0 0.10)
+    (stroke 0 0.85))
   (let [scale (/ (height) 4.1)]
     (doseq [p @(state :protozoa)]
-      (point (round (* scale (:x p))) (round (* scale (:y p)))))))
+      (let [x (round (* scale (:x p)))
+            y (round (* scale (:y p)))]
+        (if @(state :paused)
+          (point x y)
+          (rect x y 1 1))))))

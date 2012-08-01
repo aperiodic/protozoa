@@ -1,12 +1,12 @@
 (ns protozoa.core
+  (:gen-class)
   (:require [protozoa.bezier :as bez]
             [protozoa.geometry :as geom]
             [protozoa.protozoon :as zoon]
             [protozoa.pspace :as pspace]
             :reload-all)
   (:use [protozoa.util :only [draw-and-preserve-matrix]]
-        [quil core])
-  (:gen-class))
+        [quil core]))
 
 (defn setup []
   (smooth)
@@ -62,5 +62,5 @@
     :setup setup
     :draw draw
     :size [1680 1038]
-    :renderer :p2d
+    :renderer :opengl
     :key-pressed key-pressed))
