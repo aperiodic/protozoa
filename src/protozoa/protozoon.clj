@@ -3,8 +3,6 @@
   (:use [protozoa.util :only [rand]]
         [quil core]))
 
-(set! *warn-on-reflection* true)
-
 ;;
 ;; Constants & Globals
 ;;

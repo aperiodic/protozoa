@@ -5,9 +5,8 @@
             [protozoa.pspace :as pspace]
             :reload-all)
   (:use [protozoa.util :only [draw-and-preserve-matrix]]
-        [quil core]))
-
-(set! *warn-on-reflection* true)
+        [quil core])
+  (:gen-class))
 
 (defn setup []
   (smooth)
@@ -17,7 +16,7 @@
   (set-state! :protozoa (atom ())
               :pspace-path (atom nil)
               :a (atom 0), :b (atom 0), :c (atom 0), :d (atom 0)
-              :fps (atom false), :paused (atom true))
+              :fps (atom false), :paused (atom false))
   (pspace/setup)
   (zoon/setup))
 
@@ -54,13 +53,14 @@
            (background 1))
          (swap! (state :paused) not))
     \space (do (background 1) (pspace/setup))
-    :default)
-  )
+    :default))
 
-(defsketch protozoa
-  :title "Protozoa"
-  :setup setup
-  :draw draw
-  :size [1680 1038]
-  :renderer :p2d
-  :key-pressed key-pressed)
+(defn -main
+  [& args]
+  (defsketch protozoa
+    :title "Protozoa"
+    :setup setup
+    :draw draw
+    :size [1680 1038]
+    :renderer :p2d
+    :key-pressed key-pressed))

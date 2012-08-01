@@ -2,8 +2,6 @@
   (:refer-clojure :exclude [rand])
   (use [quil core]))
 
-(set! *warn-on-reflection* true)
-
 (defn binomial
   [n k]
   (int (apply * (for [i (range 1 (inc k))]

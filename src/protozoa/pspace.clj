@@ -8,8 +8,6 @@
   (:use [protozoa.util :only [invert rand]]
         [quil core]))
 
-(set! *warn-on-reflection* true)
-
 (def coeffs [:a :b :c :d])
 (def hi-limit 5)
 (def lo-limit (invert hi-limit))
@@ -56,4 +54,4 @@
           (recur))
       ;else
       (doseq [[coeff val] pos]
-        (swap! (state coeff) (constantly val))))))
+        (reset! (state coeff) val)))))
