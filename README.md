@@ -9,13 +9,13 @@ out of development smoketests of the bezier and animation namespaces.
 
 Clone this repo, then in a REPL `(use 'protozoa.core)`.
 
-The sketch starts in 'paused' mode, where the parameters of the mapping do not
-change. This produces a higher-quality image of a particular point in parameter
-space over many frames. To switch to 'play', press the `p` key on your keybord.
-In this mode, the parameters change over time, so only the last few frames are
-displayed, and the image is correspondingly lower-quality, but the behaviour of
-the mapping as the parameters animate (along a random bezier walk) is
-interesting.
+The sketch starts in 'play' mode, where the parameters of the mapping are
+changing, and correspondingly only the last few frames of particle history are
+shown. This produces a lower-quality image, but the behaviour of the mapping as
+the parameters animate (along a random bezier walk) is interesting.   To switch
+switch to 'paused' mode, where the parameters of the mapping do not change,
+producing a higher-quality image of a particular point in parameter space over
+many frames, press the `p` key on your keybord.
 
 An fps meter can be toggled by pressing your `m` key.
 
